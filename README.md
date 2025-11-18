@@ -104,13 +104,33 @@ flow-doc/
 │   └── cli.py                    # Click CLI interface
 ├── tests/
 │   ├── conftest.py               # Shared test fixtures
-│   ├── test_visualizer.py        # Visualization tests (25 tests)
-│   └── test_pattern_detector.py  # Pattern detection tests (29 tests)
+│   ├── test_analyzer.py          # Analyzer tests
+│   ├── test_agent.py             # Agent integration tests
+│   ├── test_agent_nodes.py       # Agent node tests
+│   ├── test_agent_workflow.py    # Workflow tests
+│   ├── test_api.py               # API endpoint tests
+│   ├── test_cli.py               # CLI command tests
+│   ├── test_generator.py         # Generator integration tests
+│   ├── test_generator_unit.py    # Generator unit tests
+│   ├── test_graph.py             # Graph structure tests
+│   ├── test_incremental.py       # Incremental analysis tests
+│   ├── test_memory.py            # Memory integration tests
+│   ├── test_memory_unit.py       # Memory unit tests
+│   ├── test_parser.py            # Parser tests
+│   ├── test_pattern_detector.py  # Pattern detection tests (29 tests)
+│   ├── test_vectorstore.py       # Vector store tests
+│   └── test_visualizer.py        # Visualization tests (25 tests)
 ├── docs/
 │   └── ARCHITECTURE.md           # System design and workflow
-├── sample_codebase/
-│   ├── flask_app.py              # Sample Flask application
-│   └── fastapi_app.py            # Sample FastAPI application
+├── flow_sample_codebase/         # Full-featured sample Flask/FastAPI app
+│   ├── app.py                    # Main application entry point
+│   ├── models/                   # Data models (User, Product, Order)
+│   ├── routes/                   # API route handlers
+│   ├── services/                 # Business logic layer
+│   └── utils/                    # Helper utilities (auth, db, validation)
+├── sample_codebase/              # Simple sample applications
+│   ├── flask_app.py              # Basic Flask example
+│   └── fastapi_app.py            # Basic FastAPI example
 ├── docs_output/                  # Generated documentation
 ├── .github/workflows/test.yml    # CI/CD pipeline
 └── prompts_used.md               # Implementation approach
@@ -138,7 +158,7 @@ flow-doc/
 - Rich (terminal formatting)
 
 **Testing**:
-- pytest + pytest-cov (54 tests, >80% coverage)
+- pytest + pytest-cov (245 tests, 76% coverage)
 - GitHub Actions (multi-version CI/CD)
 
 ## CLI Commands
@@ -148,26 +168,23 @@ flow-doc/
 - `flow-doc analyze <path> --incremental` - Only process changed files
 
 **Documentation Generation**
-- `flow-doc generate <component> <file>` - Generate docs for specific component
-- `flow-doc generate-all` - Generate docs for all components
-- `flow-doc generate-all --filter type:route` - Filter by component type
+- `flow-doc document <component>` - Generate docs for specific component
 
 **Pattern Detection**
-- `flow-doc patterns` - Show codebase pattern analysis
+- `flow-doc patterns` - Show codebase pattern summary
 - `flow-doc patterns check <component>` - Check specific component for deviations
 
 **Visualization**
-- `flow-doc visualize` - Generate interactive dependency graph (HTML)
-- `flow-doc visualize --format png` - Export as PNG image
-- `flow-doc visualize --format mermaid` - Export as Mermaid diagram
-- `flow-doc visualize --open-browser` - Open HTML visualization in browser
+- `flow-doc visualize` - Generate dependency graph (HTML by default)
+- `flow-doc visualize --format png` - Export as PNG
+- `flow-doc visualize --format mermaid` - Export as Mermaid
 
 **API Server**
-- `flow-doc serve` - Start FastAPI server on port 8000
+- `flow-doc server` - Start FastAPI server on port 8000
 
 ## API Endpoints
 
-Start server: `flow-doc serve`
+Start server: `flow-doc server`
 
 **Core endpoints**:
 - `GET /health` - System health check
@@ -200,7 +217,12 @@ Run the existing test suite:
 pytest tests/ -v
 ```
 
-Expected: 54 tests should pass (25 visualizer tests, 29 pattern detector tests)
+Expected: 245 tests should pass across 17 test modules with 76% code coverage
+
+Coverage report:
+```bash
+pytest tests/ --cov=src --cov-report=html
+```
 
 ## Implementation Details
 
